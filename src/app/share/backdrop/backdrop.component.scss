@@ -1,0 +1,37 @@
+:host {
+   --font-size-title: 1em;
+   --font-weight-title: 500;
+   --font-size-content: 1em;
+ }
+ 
+ .mat-expansion-panel {
+   background-color: rgba(0, 0, 0, 0);
+ }
+ 
+ .mat-expansion-panel:not(.mat-expanded):not([aria-disabled='true'])
+   .mat-expansion-panel-header:hover {
+   background-color: rgba(0, 0, 0, 0);
+ }
+ 
+ mat-panel-title {
+   font-size: var(--font-size-title);
+   font-weight: var(--font-weight-title);
+ }
+ 
+ mat-expansion-panel-header {
+   padding: 0 1em;
+ }
+ 
+ .flex-content {
+   display: flex;
+   flex-wrap: wrap;
+   column-gap: 0.8rem;
+   margin-inline: -1rem;
+   min-width: 360px;
+ 
+   font-size: var(--font-size-content);
+ }
+ 
+ .flex-items {
+   flex: 1 1 24rem;
+ }
