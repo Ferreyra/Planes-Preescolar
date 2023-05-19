@@ -50,15 +50,11 @@ export class PlanesComponent {
     return weekdaysCount;
   }
 
-  onDateRangeChange(range: DateRange<Date>): void {
-    const weekdaysCount = this.diasLaborales(range);
-    console.log(`Días laborables en el rango: ${weekdaysCount}`);
+  onDateRangeChange(event: Event): void {   // range: DateRange<Date>
+    // const weekdaysCount = this.diasLaborales(range);
+    // console.log(`Días laborables en el rango: ${weekdaysCount}`);
+    console.log('e', event)
   }
-
-  queEsRange() {
-    console.log(this.range)
-  }
-  
 
   triggerResize() {
     // Wait for changes to be applied, then trigger textarea resize.

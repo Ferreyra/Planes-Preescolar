@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormGroup } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -27,8 +27,7 @@ import { MatDatepickerIntl, MatDatepickerModule } from '@angular/material/datepi
   ],
   imports: [
     CommonModule,
-    // FormControl,
-    FormGroup,
+    ReactiveFormsModule,
     MatButtonModule,
     MatCardModule,
     MatDatepickerModule,
