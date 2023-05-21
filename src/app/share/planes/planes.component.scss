@@ -1,5 +1,5 @@
 .mat-mdc-card {
-   flex: 1 1 24rem; /*375px */
+   flex: 1 0 calc(350px - 2em); /*375px */
 }
 
 .textarea {
@@ -7,11 +7,6 @@
 }
 
 :host textarea {
-   font-size: 14px;
+   font-size: 16px;
    letter-spacing: normal;
-}
-
-button.dias-festivos {
-   background: orange;
-   border-radius: 100%;
 }

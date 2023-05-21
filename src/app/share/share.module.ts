@@ -15,6 +15,7 @@ import { AprendizajeTreeComponent } from './aprendizaje-tree/aprendizaje-tree.co
 import { BackdropComponent } from './backdrop/backdrop.component';
 import { HeaderComponent } from './header/header.component';
 import { MatDatepickerIntl, MatDatepickerModule } from '@angular/material/datepicker';
+import { FechasComponent } from './fechas/fechas.component';
 
 
 
@@ -24,6 +25,7 @@ import { MatDatepickerIntl, MatDatepickerModule } from '@angular/material/datepi
     AprendizajeTreeComponent,
     BackdropComponent,
     HeaderComponent,
+    FechasComponent,
   ],
   imports: [
     CommonModule,

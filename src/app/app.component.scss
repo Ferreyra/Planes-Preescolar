@@ -27,7 +27,7 @@
   margin: auto 1em;
   // padding: 0 16px;
   // align-items: center;
-  min-width: 360px;
+  min-width: calc(360px - 2em);
 }
 
 .header {
