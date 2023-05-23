@@ -1,8 +1,11 @@
 import { Component, NgZone, ViewChild } from '@angular/core';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { take } from 'rxjs'
-import { FormControl, NgForm } from '@angular/forms';
 
+interface Actividad {
+  texto: string,
+  material?: string   // Mejor si fuera una lista
+}
 
 @Component({
   selector: 'actividades',
@@ -11,12 +14,12 @@ import { FormControl, NgForm } from '@angular/forms';
 })
 export class PlanesComponent {
 
-  public actividadInicial: string = ''
+  public actividadInicial: string = '';
+  public actividad: Actividad[] = [];
 
   constructor (private _ngZone: NgZone) {}
   
-  @ViewChild('autosize')
-  autosize!: CdkTextareaAutosize;
+  @ViewChild('autosize') autosize!: CdkTextareaAutosize;
 
   triggerResize() {
     // Wait for changes to be applied, then trigger textarea resize.
