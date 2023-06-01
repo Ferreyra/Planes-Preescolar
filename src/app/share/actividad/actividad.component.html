@@ -1,0 +1,20 @@
+
+   <mat-form-field 
+         class="textarea"
+         appearance="outline"
+         floatLabel='always'>
+      <mat-label>Actividad {{ activityDate | date: 'fullDate' }}</mat-label>
+      <textarea matInput
+         cdkTextareaAutosize
+         #autosize="cdkTextareaAutosize"
+         cdkAutosizeMinRows="2"
+         cdkAutosizeMaxRows="5"
+         placeholder="Textarea autoajustable"
+         [value]="descripcionActividad">
+      </textarea>
+      <!-- <mat-hint *ngIf="pista"></mat-hint> -->
+   </mat-form-field>
+   <mat-checkbox class="checkbox" labelPosition="before">
+      Actividad requiere material
+   </mat-checkbox>
+

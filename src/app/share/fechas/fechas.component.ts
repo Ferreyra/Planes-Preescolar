@@ -1,6 +1,7 @@
-import { AfterViewInit, Component, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Output, ViewEncapsulation, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { DateRange, MatCalendarCellClassFunction, MatDateRangeInput, MatDateRangePicker } from '@angular/material/datepicker';
+import { DateRange, MatCalendarCellClassFunction } from '@angular/material/datepicker';
+import { PlanesService } from '../planes/planes-service.service';
 
 @Component({
   selector: 'fechas-rango',
@@ -9,6 +10,7 @@ import { DateRange, MatCalendarCellClassFunction, MatDateRangeInput, MatDateRang
   encapsulation: ViewEncapsulation.None,
 })
 export class FechasComponent {
+  public planesService = inject(PlanesService)
   
   public range = new FormGroup({
     start: new FormControl<Date | null>(null, Validators.required),
@@ -41,28 +43,11 @@ export class FechasComponent {
     return '';
   };
 
-  diasLaborales(range: DateRange<Date>): number {
-    if (!range.start || !range.end) {
-      return 0;
-    }
-    let weekdaysCount = 0;
-    let currentDate = new Date(range.start);
-    while (currentDate <= range.end) {
-      const dayOfWeek = currentDate.getDay();
-      if (dayOfWeek !== 0 && dayOfWeek !== 6) { // Ignora domingos (0) y sábados (6)
-        weekdaysCount++;
-      }
-      currentDate.setDate(currentDate.getDate() + 1); // Incrementa un día
-    }
-    return weekdaysCount;
-  }
-
   onDateRangeChange(): void {
     if (!this.range.value.start || !this.range.value.end)
-      return
-    const rangeSeleted = new DateRange(this.range.value.start, this.range.value.end)
-    const weekdaysCount = this.diasLaborales(rangeSeleted);
-    console.log(`Días laborables en el rango: ${weekdaysCount}`);
+      return;
+    // const rangeInputs = new DateRange(this.range.value.start, this.range.value.end);
+    this.planesService.rangeSelected(this.range.value.start, this.range.value.end)
   }
 
 }

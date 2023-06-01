@@ -1,11 +1,9 @@
-import { Component, NgZone, ViewChild } from '@angular/core';
+import { Component, NgZone, effect, ViewChild, inject } from '@angular/core';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { take } from 'rxjs'
 
-interface Actividad {
-  texto: string,
-  material?: string   // Mejor si fuera una lista
-}
+import { PlanesService } from './planes-service.service';
+import { Actividad } from './actividad-interface';
 
 @Component({
   selector: 'actividades',
@@ -13,9 +11,12 @@ interface Actividad {
   styleUrls: ['./planes.component.scss'],
 })
 export class PlanesComponent {
-
   public actividadInicial: string = '';
-  public actividad: Actividad[] = [];
+  private planesService = inject(PlanesService)
+  public activities: Actividad[] = [];
+  private activitiesEffect = effect(() => {
+    this.activities = this.planesService.actividades()
+  })
 
   constructor (private _ngZone: NgZone) {}
   

@@ -17,6 +17,7 @@ import { BackdropComponent } from './backdrop/backdrop.component';
 import { HeaderComponent } from './header/header.component';
 import { MatDatepickerIntl, MatDatepickerModule } from '@angular/material/datepicker';
 import { FechasComponent } from './fechas/fechas.component';
+import { ActividadComponent } from './actividad/actividad.component';
 
 
 
@@ -27,6 +28,7 @@ import { FechasComponent } from './fechas/fechas.component';
     BackdropComponent,
     HeaderComponent,
     FechasComponent,
+    ActividadComponent,
   ],
   imports: [
     CommonModule,

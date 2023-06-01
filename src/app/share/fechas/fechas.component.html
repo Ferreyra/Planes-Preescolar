@@ -4,7 +4,6 @@
          [formGroup]="range" 
          [rangePicker]="picker" 
          [dateFilter]="weekendDisable">
-         <!-- (stateChanges)="onDateRangeChange()" -->
       <input matStartDate formControlName="start" placeholder="Fecha inicio">
       <input matEndDate formControlName="end" placeholder="Fecha final">
    </mat-date-range-input>
@@ -13,7 +12,5 @@
    <mat-date-range-picker 
          #picker [dateClass]="dateClass" 
          (closed)="onDateRangeChange()">
-      <!-- (select)="onDateRangeChange($event)" -->
    </mat-date-range-picker>
 </mat-form-field>
-<!-- <p>Selected range: {{range.value | json}}</p> -->

@@ -1,5 +1,5 @@
-<div class="card-shadow">
-      <!-- <form action=""> -->
+<!-- <form action=""> -->
+   <div class="card-shadow">
       <mat-form-field 
             class="textarea"
             appearance="outline"
@@ -8,36 +8,20 @@
          <textarea matInput
             cdkTextareaAutosize
             #autosize="cdkTextareaAutosize"
-            cdkAutosizeMinRows="1"
+            cdkAutosizeMinRows="2"
             cdkAutosizeMaxRows="5"
             placeholder="Textarea autoajustable"
             [value]="actividadInicial">
          </textarea>
          <!-- <mat-hint *ngIf="pista"></mat-hint> -->
       </mat-form-field>
-      
       <fechas-rango />
       <backdrop />
-      <!-- </form> -->
    </div>
-
-<div class="card-shadow">
-   <mat-form-field 
-         class="textarea"
-         appearance="outline"
-         floatLabel='always'>
-      <mat-label>Actividad #</mat-label>
-      <textarea matInput
-         cdkTextareaAutosize
-         #autosize="cdkTextareaAutosize"
-         cdkAutosizeMinRows="1"
-         cdkAutosizeMaxRows="5"
-         placeholder="Textarea autoajustable"
-         [value]="actividadInicial">
-      </textarea>
-      <!-- <mat-hint *ngIf="pista"></mat-hint> -->
-   </mat-form-field>
-   <mat-checkbox class="checkbox" labelPosition="before">
-      Actividad requiere material
-   </mat-checkbox>
-</div>
+   
+   <actividad 
+      *ngFor="let activity of activities"
+      [activityDate]="activity.fecha"
+      class="card-shadow"
+   />
+<!-- </form> -->
