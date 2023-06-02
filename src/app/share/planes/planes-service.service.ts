@@ -37,17 +37,19 @@ export class PlanesService {
     }
     if(cambioFechas) {
       let weekdaysCount = 0;
-      let currentDate = new Date(inicio);
-      while (currentDate <= fin) {
-        const dayOfWeek = currentDate.getDay();
+      let indexDate = new Date(inicio);
+      this.actividades.set([])
+      while (indexDate <= fin) {
+        const dayOfWeek = indexDate.getDay();
         if (dayOfWeek !== 0 && dayOfWeek !== 6) { // Ignora domingos (0) y sábados (6)
           weekdaysCount++;
           this.actividades.update( (actividad) => {
-            actividad.push({texto: '', fecha: currentDate})
+            const date = new Date(indexDate.toDateString());
+            actividad.push({texto: '', fecha: date})
             return actividad
           })
         }
-        currentDate.setDate(currentDate.getDate() + 1); // Incrementa un día
+        indexDate.setDate(indexDate.getDate() + 1); // Incrementa un día
       }
       console.log(this.actividades())
     }
