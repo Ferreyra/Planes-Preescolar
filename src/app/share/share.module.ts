@@ -18,6 +18,7 @@ import { HeaderComponent } from './header/header.component';
 import { MatDatepickerIntl, MatDatepickerModule } from '@angular/material/datepicker';
 import { FechasComponent } from './fechas/fechas.component';
 import { ActividadComponent } from './actividad/actividad.component';
+import { OneTapComponent } from './one-tap/one-tap.component';
 
 
 
@@ -29,6 +30,7 @@ import { ActividadComponent } from './actividad/actividad.component';
     HeaderComponent,
     FechasComponent,
     ActividadComponent,
+    OneTapComponent,
   ],
   imports: [
     CommonModule,
