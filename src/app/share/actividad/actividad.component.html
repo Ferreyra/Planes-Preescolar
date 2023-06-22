@@ -3,7 +3,7 @@
          class="textarea"
          appearance="outline"
          floatLabel='always'>
-      <mat-label>Actividad {{ activityDate | date: 'fullDate' }}</mat-label>
+      <mat-label>Actividad {{ activityDate | date: 'fullDate' | titlecase }}</mat-label>
       <textarea matInput
          cdkTextareaAutosize
          #autosize="cdkTextareaAutosize"

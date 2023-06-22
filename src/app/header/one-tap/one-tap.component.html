@@ -1,0 +1,9 @@
+<ng-container *ngIf="session$ | async as user">
+  <button mat-button [matMenuTriggerFor]="userInfo" id="user-button">
+    <img src="{{ user.photoURL }}" alt="{{ user.displayName }}"/>
+  </button>
+  <mat-menu #userInfo="matMenu" xPosition="before">
+   <p mat-menu-item disabled="true">{{ user.displayName }}</p> 
+    <button mat-menu-item (click)="logOut()">Log Out</button>
+  </mat-menu>
+</ng-container>

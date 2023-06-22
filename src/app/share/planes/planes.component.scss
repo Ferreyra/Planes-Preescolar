@@ -11,6 +11,16 @@
    letter-spacing: normal;
 }
 
+.content {
+   display: flex;
+   flex-wrap: wrap;
+   gap: 0.8rem;
+   margin: 1em;
+   // padding: 0 16px;
+   // align-items: center;
+   min-width: calc(360px - 2em);
+ }
+
 .card {
    flex: 1 0 calc(350px - 2em);
    min-height: 5em;

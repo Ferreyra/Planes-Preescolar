@@ -3,6 +3,7 @@
 # Environments development
 .env
 src/environments
+src/app/.extras
 
 # Compiled output
 /dist
