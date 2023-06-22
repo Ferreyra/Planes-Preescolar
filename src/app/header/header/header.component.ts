@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FirebaseService } from 'src/app/services/firebase.service';
 
 @Component({
@@ -9,9 +9,11 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 export class HeaderComponent {
   public title: string = 'Planeaciones Preescolar'
   private fbs = inject(FirebaseService)
+  private loggedIn: boolean;
 
-  checkSesion() {
-    let is = this.fbs.isUserLoggedIn()
-    this.title = Boolean(is).toString()
+  constructor() {
+    this.loggedIn = this.fbs.isUserLoggedIn();
+    console.log('constructor', this.loggedIn)
   }
+
 }

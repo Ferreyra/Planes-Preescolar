@@ -41,7 +41,7 @@ export class PlanesComponent implements OnInit{
     this.fbs.docFirebase('Calendarios', '2022-2023')
       .then( docSnapShot => {
         this.calendario = docSnapShot.data();
-        console.log(this.calendario)
+        // console.log(this.calendario)
       })
   }
   

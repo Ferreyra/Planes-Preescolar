@@ -1,7 +1,7 @@
 const { writeFileSync, mkdirSync } = require('fs');
 require('dotenv').config();
 
-const targetPath = './src/environments/envirionment.ts';
+const targetPath = './src/environments/environment.ts';
 const objectConfig = JSON.parse(process.env['FIREBASE_CONFIG'])
 const envFileContent = `
 export const environment = {

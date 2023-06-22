@@ -2,7 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { FirebaseService } from 'src/app/services/firebase.service';
-import { environment } from 'src/environments/envirionment';
+import { environment } from 'src/environments/environment';
 import { CredentialResponse } from 'src/interfaces/one-tap.interface';
 
 @Component({
@@ -15,14 +15,9 @@ export class NoSessionComponent implements OnInit {
   private router = inject(Router);
   public loggedIn: boolean = false;
 
-  constructor() {
-    this.loggedIn = this.fbs.isUserLoggedIn();
-    console.log('constructor', this.loggedIn)
-  }
-
   ngOnInit(): void {
-    console.log('onInit')
     if( this.loggedIn ) {
+      console.log('onInit true')
     }
     (window as any).callback = (token: CredentialResponse) => {
       try {

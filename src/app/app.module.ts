@@ -15,7 +15,7 @@ import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ShareModule } from './share/share.module';
-import { environment } from 'src/environments/envirionment';
+import { environment } from 'src/environments/environment';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { AuthGuardModule } from '@angular/fire/auth-guard';
 import { HeaderModule } from './header/header.module';

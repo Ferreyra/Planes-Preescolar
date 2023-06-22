@@ -1,5 +1,6 @@
 {
    "cSpell.words": [
       "firestore"
-   ]
+   ],
+   "files.autoSave": "afterDelay"
 }
