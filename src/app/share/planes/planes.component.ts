@@ -7,7 +7,7 @@ import { DocumentData } from '@angular/fire/firestore';
 import { PlanesService } from '../../services/planes.service';
 import { Actividad } from '../../../interfaces/actividad-interface';
 import { FirebaseService } from 'src/app/services/firebase.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DateRange } from '@angular/material/datepicker';
 
 @Component({
@@ -18,33 +18,55 @@ import { DateRange } from '@angular/material/datepicker';
 export class PlanesComponent implements OnInit{
   private _ngZone = inject(NgZone)
   private planesService = inject(PlanesService);
-  private fbs = inject(FirebaseService);
   private fb = inject(FormBuilder)
-
+  
+  private fbs = inject(FirebaseService);
   private calendario: DocumentData | undefined;
   // public actividadInicial: string = '';
+
   public activities: Actividad[] = [];
 
   public planForm: FormGroup = this.fb.group( {
     actividadInicial: ['', Validators.required],
-    jardinId: ['', Validators.required],
-    fechasRango: [ DateRange, Validators.required],
+    // jardinId: ['', Validators.required],
+    dateRange: [ DateRange, Validators.required],
+    activitiesForm: [[], Validators.required],
     cierre: ['', Validators.required],
     observaciones: ['', Validators.required],
   })
 
   private activitiesEffect = effect(() => {
     this.activities = this.planesService.actividades()
+    this.activities.forEach( (activity) => {
+      this.addActivityForm( activity.fecha )
+    })
+    this.setRange();
   })
   
-  ngOnInit(): void {
-    this.fbs.docFirebase('Calendarios', '2022-2023')
-      .then( docSnapShot => {
-        this.calendario = docSnapShot.data();
-        // console.log(this.calendario)
+  ngOnInit(): void {    
+  }
+
+  addActivityForm(fecha: Date) {
+    ( this.planForm.get('activitiesForm') as FormArray ).push(
+      new FormGroup({
+        fecha: new FormControl( fecha, Validators.required ),
+        actividad: new FormControl( '', Validators.required ),
+        materiales: new FormControl( '' )
       })
+    )
   }
   
+  get activitiesForm() {
+    return ( this.planForm.get('activitiesForm') as FormArray ).controls
+  }
+
+  setRange() {
+    const rangeStore = localStorage.getItem('rangeStore')
+    if( rangeStore ) {
+      this.planForm.patchValue({dateRange: JSON.parse(rangeStore) as DateRange<Date>}) 
+    }
+  }
+
   @ViewChild('autosize') autosize!: CdkTextareaAutosize;
 
   triggerResize() {

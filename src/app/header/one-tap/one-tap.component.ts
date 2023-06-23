@@ -15,12 +15,6 @@ export class OneTapComponent {
   private fbs = inject(FirebaseService)
   private router = inject(Router)
 
-  // private authObserver?: Observer<User>  = {
-  //   next: user => {console.log('auth', user);},
-  //   error: err => {console.log('authErr', err);},
-  //   complete: () => {console.log('authComplete');},
-  // };
-
   public imgUrl = signal('');
   public userName = signal('User Logo');
   

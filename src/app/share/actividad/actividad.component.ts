@@ -8,14 +8,16 @@ import { take } from 'rxjs';
   styleUrls: ['./actividad.component.scss']
 })
 export class ActividadComponent {
-  
-  public descripcionActividad: string = '';
+  public checked: boolean = false;
+  public formGroupName: string;
 
-  constructor (private _ngZone: NgZone) {}
+  constructor (private _ngZone: NgZone) {
+    this.formGroupName= `${this.activityDate.getDate()}() ${this.activityDate.getMonth()}`;
+  }
   
   @ViewChild('autosize') autosize!: CdkTextareaAutosize;
 
-  @Input() activityDate?: Date;
+  @Input() activityDate!: Date;
 
   triggerResize() {
     // Wait for changes to be applied, then trigger textarea resize.

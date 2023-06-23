@@ -15,12 +15,13 @@
          </textarea>
          <!-- <mat-hint *ngIf="pista"></mat-hint> -->
       </mat-form-field>
-      <fechas-rango />  <!-- Calendario @Output o en FirebaseService -->
+      <fechas-rango />
       <backdrop />
    </div>
    
    <actividad 
-      *ngFor="let activity of activities"
+      formArrayName="activitiesForm"
+      *ngFor="let activity of activities; let i = index"
       [activityDate]="activity.fecha"
       class="card-shadow"
    />

@@ -1,9 +1,9 @@
 import { Injectable, OnDestroy, inject, signal } from '@angular/core';
-import { Observable, Subscription, from, map, of, tap } from 'rxjs';
+import { Observable, Observer, Subscription, from, map, of, tap } from 'rxjs';
 
 import { FirebaseApp } from '@angular/fire/app';
 import { getFirestore, doc, getDoc, collection, collectionData, DocumentData } from '@angular/fire/firestore';
-import { Auth, authState, GoogleAuthProvider, signInWithCredential, signOut, User, user } from '@angular/fire/auth';
+import { Auth, authState, GoogleAuthProvider, signInWithCredential, signOut, User } from '@angular/fire/auth';
 
 export interface Item {
   name: string;
@@ -22,14 +22,19 @@ export class FirebaseService implements OnDestroy {
   public authState$ = authState(this.auth)  
   private db = getFirestore(this.fbApp);
   private session$: Subscription;
-  // private calendario?: Promise<DocumentData | undefined>;
-
-  constructor() {  
-    this.session$ = this.authState$.subscribe( (user) => {      
+  
+  private authObserver?: Observer<User | null>  = {
+    next: (user: User | null) => {
       console.log('fbsUser', user)
       this.user = user;
       this.isUserLoggedIn.set(user ? true : false)
-    });
+    },
+    error: (error: any) => {console.log('authState', error);},
+    complete: () => {console.log('authStateComplete');},
+  };
+
+  constructor() {  
+    this.session$ = this.authState$.subscribe( this.authObserver );
   }
 
   userAuth$(idToken: string): Observable< User > {
@@ -53,7 +58,7 @@ export class FirebaseService implements OnDestroy {
     return signOut(this.auth);
   }
 
-  get curretUser(): User | undefined{
+  get currentUser(): User | undefined{
     if(!this.user) return undefined
     return structuredClone( this.user )
   }
@@ -63,7 +68,7 @@ export class FirebaseService implements OnDestroy {
     return getDoc(docReference) 
   }
 
-  getColletion(path: string): Observable<DocumentData[]> {
+  getCollection(path: string): Observable<DocumentData[]> {
     const collectionInstance = collection(this.db, path);
     return collectionData(collectionInstance)
   }

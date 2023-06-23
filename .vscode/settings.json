@@ -2,5 +2,6 @@
    "cSpell.words": [
       "firestore"
    ],
-   "files.autoSave": "afterDelay"
+   "files.autoSave": "afterDelay",
+   "editor.fontSize": 14
 }

@@ -10,11 +10,39 @@ import { DateRange } from '@angular/material/datepicker';
 })
 
 export class PlanesService {
-  private calendario: DocumentData | undefined;
-  public actividadInicial: string = '';
+  private fbs = inject(FirebaseService);
+  public holydays: DocumentData | undefined;
+  public dateMin!: Date;
+  public dateMax!: Date;
   public actividades = signal<Actividad[]>([]);
  
-  // constructor() {}
+  constructor() {
+    this.cicloEscolar();
+    this.diasFestivos();
+  }
+
+  private async diasFestivos() {
+    const ciclo = `${ this.dateMin.getFullYear() }-${ this.dateMax.getFullYear() }`;
+    const docSnapShot = await this.fbs.docFirebase('Calendarios', ciclo);    
+    this.holydays = docSnapShot.data();
+  }
+
+  private cicloEscolar() {
+    const today: Date = new Date(Date.now());
+    let fMax = '07/31/';
+    let fMin = '08/01/';
+    if( today.getMonth() > 6 ) {
+      fMax += today.getFullYear() + 1;
+      fMin += today.getFullYear();
+      this.dateMax = new Date( fMax )   // meses 0-6
+      this.dateMin = new Date( fMin )    // meses 7-12
+    } else {
+      fMax += today.getFullYear();
+      fMin += today.getFullYear() - 1;
+      this.dateMax = new Date( fMax )   // meses 0-6
+      this.dateMin = new Date( fMin )    // meses 7-12
+    }
+  }
   
   public rangeSelected(range: DateRange<Date>) {
 
@@ -41,10 +69,10 @@ export class PlanesService {
       while (indexDate <= range.end!) {
         const dayOfWeek = indexDate.getDay();
         if (dayOfWeek !== 0 && dayOfWeek !== 6) { // Ignora domingos (0) y sábados (6)
-          if( this.calendario ) {
+          if( this.holydays ) {
             const diaMes = indexDate.getDate();
             const month = indexDate.getMonth() + 1;
-            const mes = this.calendario[month];
+            const mes = this.holydays[month];
             if( mes ){
               const festivo = mes.find((festivo: number) => festivo === diaMes);
               if( festivo ) console.log('festivo', festivo)
@@ -69,6 +97,7 @@ export class PlanesService {
         indexDate.setDate(indexDate.getDate() + 1);
       }
     }
+    console.log(this.actividades())
   }
   
 }

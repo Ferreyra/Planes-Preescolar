@@ -11,13 +11,13 @@ import { DocumentData } from '@angular/fire/firestore';
   styleUrls: ['./fechas.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class FechasComponent implements OnInit{
+export class FechasComponent {
   private planesService = inject(PlanesService);
   private fbs = inject(FirebaseService);
   
-  private calendario: DocumentData | undefined;
-  public dateMax: Date = new Date('07/31/2023');
-  public dateMin: Date = new Date('08/01/2022');
+  private holydays: DocumentData | undefined;
+  public dateMax: Date;
+  public dateMin: Date;
   private rangeSelect?: DateRange<Date>;
   
   public dateRange = new FormGroup({
@@ -26,22 +26,13 @@ export class FechasComponent implements OnInit{
   });
 
   constructor () {
-    const today: Date = new Date(Date.now());
-    if( today.getMonth() > 6 ) {
-      this.dateMax.setFullYear( today.getFullYear() + 1 )
-      this.dateMin.setFullYear( today.getFullYear() )
-    }
+    this.dateMin = this.planesService.dateMin;
+    this.dateMax = this.planesService.dateMax;
+    this.holydays = this.planesService.holydays;
+    console.log(this.holydays)
   }
 
-  ngOnInit(): void {
-    this.fbs.docFirebase('Calendarios', '2022-2023')
-      .then( docSnapShot => {
-        this.calendario = docSnapShot.data();
-      })
-  }
-
-  weekendDisable: (date: Date | null) => boolean =
-  (date: Date | null) => {
+  weekendDisable: (date: Date | null) => boolean = (date: Date | null) => {
     if (!date) {
       return false;
     }
@@ -49,10 +40,10 @@ export class FechasComponent implements OnInit{
     if (day === 0 || day === 6)
       return false;
     else
-      if( this.calendario ) {
+      if( this.holydays ) {
         const diaMes = date.getDate();
         const month = date.getMonth() + 1;
-        const mes = this.calendario[month]
+        const mes = this.holydays[month]
         if( mes ){
           const found = mes.find((festivo: number) => festivo === diaMes);
           return found ? false : true        
@@ -68,10 +59,10 @@ export class FechasComponent implements OnInit{
       if (weekend === 0 || weekend === 6)
         return 'fin-de-semana'
       else {
-        if( this.calendario ) {
+        if( this.holydays ) {
           const date = cellDate.getDate();
           const month = cellDate.getMonth() + 1;
-          const mes = this.calendario[month]
+          const mes = this.holydays[month]
           if( mes ){
             let found = mes.find((festivo: number) => festivo === date)             
             return found ? 'dias-festivos' : '';            
@@ -83,7 +74,7 @@ export class FechasComponent implements OnInit{
   };
 
   onDateRangeChange(): void {
-    if (this.dateRange.invalid) return;    
+    if (this.dateRange.invalid) return; 
     this.planesService.rangeSelected((this.dateRange.value) as DateRange<Date>)
   }
 
