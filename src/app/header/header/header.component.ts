@@ -8,12 +8,5 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 })
 export class HeaderComponent {
   public title: string = 'Planeaciones Preescolar'
-  private fbs = inject(FirebaseService)
-  private loggedIn: boolean;
-
-  constructor() {
-    this.loggedIn = this.fbs.isUserLoggedIn();
-    console.log('constructor', this.loggedIn)
-  }
-
+  
 }

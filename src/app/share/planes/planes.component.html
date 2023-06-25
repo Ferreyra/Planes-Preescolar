@@ -19,10 +19,12 @@
       <backdrop />
    </div>
    
-   <actividad 
-      formArrayName="activitiesForm"
+   <div formArrayName="activitiesForm"
       *ngFor="let activity of activities; let i = index"
-      [activityDate]="activity.fecha"
-      class="card-shadow"
-   />
+      class="card-shadow">
+      <actividad          
+         [activityDate]="activity.fecha"
+         [formGroupName]="actividadFormGroup"
+      />
+   </div>
 </form>

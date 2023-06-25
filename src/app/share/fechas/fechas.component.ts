@@ -1,8 +1,7 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation, inject } from '@angular/core';
+import { Component, ViewEncapsulation, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DateRange, MatCalendarCellClassFunction } from '@angular/material/datepicker';
 import { PlanesService } from '../../services/planes.service';
-import { FirebaseService } from 'src/app/services/firebase.service';
 import { DocumentData } from '@angular/fire/firestore';
 
 @Component({
@@ -13,7 +12,6 @@ import { DocumentData } from '@angular/fire/firestore';
 })
 export class FechasComponent {
   private planesService = inject(PlanesService);
-  private fbs = inject(FirebaseService);
   
   private holydays: DocumentData | undefined;
   public dateMax: Date;
@@ -28,8 +26,6 @@ export class FechasComponent {
   constructor () {
     this.dateMin = this.planesService.dateMin;
     this.dateMax = this.planesService.dateMax;
-    this.holydays = this.planesService.holydays;
-    console.log(this.holydays)
   }
 
   weekendDisable: (date: Date | null) => boolean = (date: Date | null) => {
@@ -39,7 +35,8 @@ export class FechasComponent {
     const day = date.getDay();
     if (day === 0 || day === 6)
       return false;
-    else
+    else {
+      this.holydays = this.planesService.holydays;
       if( this.holydays ) {
         const diaMes = date.getDate();
         const month = date.getMonth() + 1;
@@ -51,6 +48,7 @@ export class FechasComponent {
           return true;
       } else
       return true;
+    }
   };
 
   dateClass: MatCalendarCellClassFunction<Date> = (cellDate, view) => {
@@ -59,6 +57,7 @@ export class FechasComponent {
       if (weekend === 0 || weekend === 6)
         return 'fin-de-semana'
       else {
+        this.holydays = this.planesService.holydays;
         if( this.holydays ) {
           const date = cellDate.getDate();
           const month = cellDate.getMonth() + 1;

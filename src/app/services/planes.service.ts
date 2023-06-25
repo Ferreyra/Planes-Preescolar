@@ -22,6 +22,7 @@ export class PlanesService {
   }
 
   private async diasFestivos() {
+    // Cambiar fn usando try catch para manejo de error
     const ciclo = `${ this.dateMin.getFullYear() }-${ this.dateMax.getFullYear() }`;
     const docSnapShot = await this.fbs.docFirebase('Calendarios', ciclo);    
     this.holydays = docSnapShot.data();
@@ -64,8 +65,7 @@ export class PlanesService {
       localStorage.setItem('rangeStore', JSON.stringify(range))
       let weekdaysCount = 0;
       let indexDate = new Date(range.start!);
-      this.actividades.set([])
-
+      this.actividades.set([]);
       while (indexDate <= range.end!) {
         const dayOfWeek = indexDate.getDay();
         if (dayOfWeek !== 0 && dayOfWeek !== 6) { // Ignora domingos (0) y sábados (6)
@@ -75,7 +75,6 @@ export class PlanesService {
             const mes = this.holydays[month];
             if( mes ){
               const festivo = mes.find((festivo: number) => festivo === diaMes);
-              if( festivo ) console.log('festivo', festivo)
               if( !festivo ) {
                 weekdaysCount++;
                 this.actividades.update( (actividad) => {
@@ -97,7 +96,7 @@ export class PlanesService {
         indexDate.setDate(indexDate.getDate() + 1);
       }
     }
-    console.log(this.actividades())
+    console.log({actividades: this.actividades()})
   }
   
 }

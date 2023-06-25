@@ -1,13 +1,9 @@
 import { Injectable, OnDestroy, inject, signal } from '@angular/core';
-import { Observable, Observer, Subscription, from, map, of, tap } from 'rxjs';
+import { Observable, Observer, Subscription, catchError, from, map, of, tap, throwError } from 'rxjs';
 
 import { FirebaseApp } from '@angular/fire/app';
 import { getFirestore, doc, getDoc, collection, collectionData, DocumentData } from '@angular/fire/firestore';
 import { Auth, authState, GoogleAuthProvider, signInWithCredential, signOut, User } from '@angular/fire/auth';
-
-export interface Item {
-  name: string;
-}
 
 @Injectable({
   providedIn: 'root'
@@ -45,7 +41,11 @@ export class FirebaseService implements OnDestroy {
         tap( userCred => {
           console.log('signIn', userCred)
         }),
-        map( userCred => userCred.user )
+        map( userCred => userCred.user ),
+        catchError( err => {
+          console.log('signin error', err);
+          return throwError( () => err.error )
+        } )
     )
   }
 

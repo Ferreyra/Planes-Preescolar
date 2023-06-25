@@ -22,22 +22,23 @@ export class PlanesComponent implements OnInit{
   
   private fbs = inject(FirebaseService);
   private calendario: DocumentData | undefined;
-  // public actividadInicial: string = '';
+  public actividadFormGroup!: string;
 
-  public activities: Actividad[] = [];
+  public activities: Actividad[] = []; 
 
   public planForm: FormGroup = this.fb.group( {
     actividadInicial: ['', Validators.required],
     // jardinId: ['', Validators.required],
     dateRange: [ DateRange, Validators.required],
-    activitiesForm: [[], Validators.required],
+    activitiesForm: new FormArray([]),
     cierre: ['', Validators.required],
     observaciones: ['', Validators.required],
   })
 
   private activitiesEffect = effect(() => {
-    this.activities = this.planesService.actividades()
+    this.activities = this.planesService.actividades();
     this.activities.forEach( (activity) => {
+      this.actividadFormGroup = activity.fecha.toLocaleDateString()
       this.addActivityForm( activity.fecha )
     })
     this.setRange();
@@ -46,7 +47,7 @@ export class PlanesComponent implements OnInit{
   ngOnInit(): void {    
   }
 
-  addActivityForm(fecha: Date) {
+  addActivityForm(fecha: Date) {    
     ( this.planForm.get('activitiesForm') as FormArray ).push(
       new FormGroup({
         fecha: new FormControl( fecha, Validators.required ),
@@ -57,6 +58,7 @@ export class PlanesComponent implements OnInit{
   }
   
   get activitiesForm() {
+    debugger
     return ( this.planForm.get('activitiesForm') as FormArray ).controls
   }
 

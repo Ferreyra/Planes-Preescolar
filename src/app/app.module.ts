@@ -11,13 +11,12 @@ import { MatNativeDateModule } from '@angular/material/core';
 
 import { provideFirebaseApp, initializeApp, getApp } from '@angular/fire/app';
 import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, provideFirestore } from '@angular/fire/firestore';
+import { getAuth, provideAuth } from '@angular/fire/auth';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ShareModule } from './share/share.module';
 import { environment } from 'src/environments/environment';
-import { getAuth, provideAuth } from '@angular/fire/auth';
-import { AuthGuardModule } from '@angular/fire/auth-guard';
 import { HeaderModule } from './header/header.module';
 
 registerLocaleData(localeEs);
@@ -28,7 +27,6 @@ registerLocaleData(localeEs);
   ],
   imports: [
     AppRoutingModule,
-    AuthGuardModule,
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     provideAuth(() => getAuth()),
     provideFirestore(() => initializeFirestore(getApp(), {

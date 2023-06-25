@@ -26,7 +26,7 @@ export class OneTapComponent {
     await this.fbs.logOut();
     this.imgUrl.set('');
     this.userName.set('');
-    this.router.navigate(['/']);
+    this.router.navigate(['']);
   }
 
 }
