@@ -1,5 +1,5 @@
 export interface Actividad {
-   texto: string,
+   actividad: string,
    fecha: Date,
    material?: string   // Mejor si fuera una lista
 }

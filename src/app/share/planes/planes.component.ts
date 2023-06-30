@@ -1,71 +1,71 @@
-import { Component, NgZone, effect, ViewChild, inject, OnInit } from '@angular/core';
+import { Component, NgZone, effect, ViewChild, inject } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
+import { DateRange } from '@angular/material/datepicker';
 import { take } from 'rxjs'
 
-import { DocumentData } from '@angular/fire/firestore';
-
 import { PlanesService } from '../../services/planes.service';
-import { Actividad } from '../../../interfaces/actividad-interface';
-import { FirebaseService } from 'src/app/services/firebase.service';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { DateRange } from '@angular/material/datepicker';
 
 @Component({
   selector: 'actividades',
   templateUrl: './planes.component.html',
   styleUrls: ['./planes.component.scss'],
 })
-export class PlanesComponent implements OnInit{
+export class PlanesComponent {
   private _ngZone = inject(NgZone)
-  private planesService = inject(PlanesService);
   private fb = inject(FormBuilder)
+  private planesService = inject(PlanesService);
   
-  private fbs = inject(FirebaseService);
-  private calendario: DocumentData | undefined;
-  public actividadFormGroup!: string;
-
-  public activities: Actividad[] = []; 
+  public activityFormGroupName!: string;
+  public showCierre = false;
 
   public planForm: FormGroup = this.fb.group( {
     actividadInicial: ['', Validators.required],
-    // jardinId: ['', Validators.required],
     dateRange: [ DateRange, Validators.required],
-    activitiesForm: new FormArray([]),
+    activitiesForm: this.fb.array([]),
     cierre: ['', Validators.required],
     observaciones: ['', Validators.required],
+    // jardinId: ['', Validators.required],
   })
 
   private activitiesEffect = effect(() => {
-    this.activities = this.planesService.actividades();
-    this.activities.forEach( (activity) => {
-      this.actividadFormGroup = activity.fecha.toLocaleDateString()
-      this.addActivityForm( activity.fecha )
-    })
+    ( this.planForm.get('activitiesForm') as FormArray ).clear();
+    this.planesService.dateActivities().forEach( (date) => {
+      this.addActivityForm( date );
+      // ( this.planForm.get('activitiesForm') as FormArray ).push( activityFromGroup )
+    });
+    if(this.planForm.get('dateRange')?.valid) {
+      this.showCierre = true;
+    }
+    /* this.activities.forEach( (activity) => {
+      this.activityFormGroupName = activity.fecha.toLocaleDateString();
+    }) */
     this.setRange();
   })
-  
-  ngOnInit(): void {    
+
+  constructor() {
+    this.planForm.patchValue({dateRange: null})
   }
 
-  addActivityForm(fecha: Date) {    
-    ( this.planForm.get('activitiesForm') as FormArray ).push(
-      new FormGroup({
-        fecha: new FormControl( fecha, Validators.required ),
-        actividad: new FormControl( '', Validators.required ),
-        materiales: new FormControl( '' )
-      })
-    )
+  addActivityForm(dateActivity: Date) {  
+    const activityFromGroup: FormGroup = this.fb.group({
+      fecha: [dateActivity, Validators.required],
+      actividad: ['', Validators.required],
+      materiales: ['']
+    });
+    ( this.planForm.get('activitiesForm') as FormArray ).push( activityFromGroup );
   }
-  
+
   get activitiesForm() {
-    debugger
-    return ( this.planForm.get('activitiesForm') as FormArray ).controls
+    return (this.planForm.get('activitiesForm') as FormArray).controls
   }
-
+  /* activitiesForm$() {
+    return from(this.planForm.get('activitiesForm'))
+  } */
   setRange() {
     const rangeStore = localStorage.getItem('rangeStore')
     if( rangeStore ) {
-      this.planForm.patchValue({dateRange: JSON.parse(rangeStore) as DateRange<Date>}) 
+      this.planForm.patchValue({dateRange: JSON.parse(rangeStore) as DateRange<Date>})
     }
   }
 

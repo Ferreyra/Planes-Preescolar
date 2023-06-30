@@ -9,22 +9,54 @@
             cdkTextareaAutosize
             #autosize="cdkTextareaAutosize"
             cdkAutosizeMinRows="2"
-            cdkAutosizeMaxRows="5"
+            cdkAutosizeMaxRows="6"
             placeholder="Textarea autoajustable"
             formControlName="actividadInicial">
          </textarea>
          <!-- <mat-hint *ngIf="pista"></mat-hint> -->
       </mat-form-field>
       <fechas-rango />
-      <backdrop />
+      <!-- <backdrop /> -->
+      <pre><code> {{ planForm.getRawValue() | json }} </code></pre>
    </div>
    
-   <div formArrayName="activitiesForm"
-      *ngFor="let activity of activities; let i = index"
-      class="card-shadow">
-      <actividad          
-         [activityDate]="activity.fecha"
-         [formGroupName]="actividadFormGroup"
-      />
+   <actividad formArrayName="activitiesForm"
+      *ngFor="let activityForm of activitiesForm"
+      [activityForm]="activityForm"
+      class="card-shadow"
+   />
+   <div class="card-shadow"
+        *ngIf="showCierre">
+      <mat-form-field 
+            class="textarea"
+            appearance="outline"
+            floatLabel='always'>
+         <mat-label>Observaciones</mat-label>
+         <textarea matInput
+            cdkTextareaAutosize
+            #autosize="cdkTextareaAutosize"
+            cdkAutosizeMinRows="2"
+            cdkAutosizeMaxRows="6"
+            placeholder="Textarea autoajustable"
+            formControlName="observaciones">
+         </textarea>
+         <!-- <mat-hint *ngIf="pista"></mat-hint> -->
+      </mat-form-field>
+      <mat-form-field 
+            class="textarea"
+            appearance="outline"
+            floatLabel='always'>
+         <mat-label>Cierre</mat-label>
+         <textarea matInput
+            cdkTextareaAutosize
+            #autosize="cdkTextareaAutosize"
+            cdkAutosizeMinRows="2"
+            cdkAutosizeMaxRows="6"
+            placeholder="Textarea autoajustable"
+            formControlName="cierre">
+         </textarea>
+         <!-- <mat-hint *ngIf="pista"></mat-hint> -->
+      </mat-form-field>
    </div>
+
 </form>

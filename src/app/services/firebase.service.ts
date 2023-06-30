@@ -2,7 +2,7 @@ import { Injectable, OnDestroy, inject, signal } from '@angular/core';
 import { Observable, Observer, Subscription, catchError, from, map, of, tap, throwError } from 'rxjs';
 
 import { FirebaseApp } from '@angular/fire/app';
-import { getFirestore, doc, getDoc, collection, collectionData, DocumentData } from '@angular/fire/firestore';
+import { getFirestore, doc, getDoc, collection, collectionData, DocumentData, query, where } from '@angular/fire/firestore';
 import { Auth, authState, GoogleAuthProvider, signInWithCredential, signOut, User } from '@angular/fire/auth';
 
 @Injectable({
@@ -68,8 +68,12 @@ export class FirebaseService implements OnDestroy {
     return getDoc(docReference) 
   }
 
-  getCollection(path: string): Observable<DocumentData[]> {
+  getCollection(path: string, filter?: string): Observable<DocumentData[]> {
     const collectionInstance = collection(this.db, path);
+    let q = query( collectionInstance )
+    if( filter ) {
+      q = query( collectionInstance, where('fecha', '==', filter) )
+    }
     return collectionData(collectionInstance)
   }
 

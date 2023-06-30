@@ -1,8 +1,9 @@
-import { Component, ViewEncapsulation, inject } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { DateRange, MatCalendarCellClassFunction } from '@angular/material/datepicker';
+import { MatCalendarCellClassFunction } from '@angular/material/datepicker';
 import { PlanesService } from '../../services/planes.service';
 import { DocumentData } from '@angular/fire/firestore';
+import { FirebaseService } from 'src/app/services/firebase.service';
 
 @Component({
   selector: 'fechas-rango',
@@ -10,13 +11,16 @@ import { DocumentData } from '@angular/fire/firestore';
   styleUrls: ['./fechas.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class FechasComponent {
+export class FechasComponent implements OnInit{
   private planesService = inject(PlanesService);
+  private fbs = inject(FirebaseService);
   
   private holydays: DocumentData | undefined;
   public dateMax: Date;
-  public dateMin: Date;
-  private rangeSelect?: DateRange<Date>;
+  public dateMin: Date;  
+  /* private festivos$?: Observable<DocumentData[]>;
+  private calendarioFestivo?: DocumentData;
+  private mesesFestivos: string[] = []; */
   
   public dateRange = new FormGroup({
     start: new FormControl<Date | null>(null, Validators.required),
@@ -27,6 +31,19 @@ export class FechasComponent {
     this.dateMin = this.planesService.dateMin;
     this.dateMax = this.planesService.dateMax;
   }
+
+  ngOnInit(): void {
+    
+  }
+
+  /* year() {
+    this.festivos$ = this.fbs.getCollection('Calendario')
+    this.festivos$.subscribe( (diasF) => {
+      this.calendarioFestivo = diasF;
+      this.mesesFestivos= Object.keys(this.calendarioFestivo)
+      console.log({ fechasCalendario: this.calendarioFestivo, keysMeses: this.mesesFestivos})
+    })
+  } */
 
   weekendDisable: (date: Date | null) => boolean = (date: Date | null) => {
     if (!date) {
@@ -61,6 +78,7 @@ export class FechasComponent {
         if( this.holydays ) {
           const date = cellDate.getDate();
           const month = cellDate.getMonth() + 1;
+          // console.log({delMes: this.festivosDelMes[month]})
           const mes = this.holydays[month]
           if( mes ){
             let found = mes.find((festivo: number) => festivo === date)             
@@ -73,8 +91,10 @@ export class FechasComponent {
   };
 
   onDateRangeChange(): void {
-    if (this.dateRange.invalid) return; 
-    this.planesService.rangeSelected((this.dateRange.value) as DateRange<Date>)
+    if (this.dateRange.invalid) return;
+    const start = this.dateRange.value.start!.toDateString();
+    const end = this.dateRange.value.end!.toDateString();
+    this.planesService.rangeSelected( start, end )
   }
 
 }

@@ -1,9 +1,7 @@
-import { Injectable, OnInit, inject, signal } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 
-import { Actividad } from '../../interfaces/actividad-interface';
 import { FirebaseService } from './firebase.service';
 import { DocumentData } from '@angular/fire/firestore';
-import { DateRange } from '@angular/material/datepicker';
 
 @Injectable({
   providedIn: 'root'
@@ -14,21 +12,22 @@ export class PlanesService {
   public holydays: DocumentData | undefined;
   public dateMin!: Date;
   public dateMax!: Date;
-  public actividades = signal<Actividad[]>([]);
+  public cicloEscolar: string = '';
+  public dateActivities = signal<Date[]>([]);
  
   constructor() {
-    this.cicloEscolar();
+    this.getCiclo();
     this.diasFestivos();
   }
-
+ 
   private async diasFestivos() {
     // Cambiar fn usando try catch para manejo de error
-    const ciclo = `${ this.dateMin.getFullYear() }-${ this.dateMax.getFullYear() }`;
-    const docSnapShot = await this.fbs.docFirebase('Calendarios', ciclo);    
+    this.cicloEscolar = `${ this.dateMin.getFullYear() }-${ this.dateMax.getFullYear() }`;
+    const docSnapShot = await this.fbs.docFirebase('Calendarios', this.cicloEscolar);    
     this.holydays = docSnapShot.data();
   }
 
-  private cicloEscolar() {
+  private getCiclo() {
     const today: Date = new Date(Date.now());
     let fMax = '07/31/';
     let fMin = '08/01/';
@@ -45,16 +44,15 @@ export class PlanesService {
     }
   }
   
-  public rangeSelected(range: DateRange<Date>) {
+  public rangeSelected(start: string, end: string) {
 
     let cambioFechas: boolean = false;
-    const rangeStore = localStorage.getItem('rangeStore')
-    if( rangeStore ) {
-      const rs = (JSON.parse(rangeStore) as DateRange<Date>)
-      if ( rs.start! !== range.start!) {
+    const rangeStored = localStorage.getItem('rangeStore');
+    if( rangeStored ) {
+      const { startStored, endStored } = JSON.parse(rangeStored)
+      if ( startStored !== start ) {
         cambioFechas = true;
-      }
-      if (rs.end! !== range.end!) {
+      } else if ( endStored !== end ) {
         cambioFechas = true;
       }
     } else {
@@ -62,11 +60,14 @@ export class PlanesService {
     }
     
     if( cambioFechas ) {
-      localStorage.setItem('rangeStore', JSON.stringify(range))
-      let weekdaysCount = 0;
-      let indexDate = new Date(range.start!);
-      this.actividades.set([]);
-      while (indexDate <= range.end!) {
+      const startStored = start;
+      const endStored = end;
+      localStorage.setItem('rangeStore', JSON.stringify({ startStored, endStored }))
+      // let weekdaysCount = 0;
+      let indexDate = new Date(start);
+      const rangeEnd = new Date(end)
+      this.dateActivities.set([]);
+      while (indexDate <= rangeEnd) {
         const dayOfWeek = indexDate.getDay();
         if (dayOfWeek !== 0 && dayOfWeek !== 6) { // Ignora domingos (0) y sábados (6)
           if( this.holydays ) {
@@ -76,27 +77,27 @@ export class PlanesService {
             if( mes ){
               const festivo = mes.find((festivo: number) => festivo === diaMes);
               if( !festivo ) {
-                weekdaysCount++;
-                this.actividades.update( (actividad) => {
-                  const date = new Date(indexDate.toDateString());
-                  actividad.push({texto: '', fecha: date})
-                  return actividad
+                // weekdaysCount++;
+                this.dateActivities.update( (date) => {
+                  const _date = new Date(indexDate.toDateString());
+                  date.push( _date )
+                  return date
                 })
               }
             }
           } else {
-            weekdaysCount++;
-            this.actividades.update( (actividad) => {
-              const date = new Date(indexDate.toDateString());
-              actividad.push({texto: '', fecha: date})
-              return actividad
+            // weekdaysCount++;
+            this.dateActivities.update( (date) => {
+              const _date = new Date(indexDate.toDateString());
+              date.push( _date )
+              return date
             })
           }
         }
         indexDate.setDate(indexDate.getDate() + 1);
       }
     }
-    console.log({actividades: this.actividades()})
+    console.log({actividades: this.dateActivities()})
   }
   
 }
