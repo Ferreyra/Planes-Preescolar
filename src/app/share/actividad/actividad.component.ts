@@ -1,7 +1,7 @@
 import { Component, Input, NgZone, OnInit, ViewChild, inject } from '@angular/core';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { take } from 'rxjs';
-import { AbstractControl, FormGroup } from '@angular/forms';
+import { AbstractControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'actividad',
@@ -13,13 +13,22 @@ export class ActividadComponent implements OnInit {
   public date!: Date;
   public form!: FormGroup;
 
+  @ViewChild('autosize') autosize!: CdkTextareaAutosize;
+  @Input() activityForm!: AbstractControl;
+
   ngOnInit () {
     this.form = ( this.activityForm as FormGroup )
     this.date = this.form.controls['fecha'].value
   }
   
-  @ViewChild('autosize') autosize!: CdkTextareaAutosize;
-  @Input() activityForm!: AbstractControl;
+  get requiereMateriales (): boolean {
+    if( this.form.controls['requiereMateriales'].value === true ) {
+      this.form.controls['materiales'].setValidators( [Validators.required, Validators.minLength(6)] );
+    } else {
+      this.form.controls['materiales'].clearValidators();
+    }
+    return this.form.controls['requiereMateriales'].value
+  } 
 
   triggerResize(): void {
     // Wait for changes to be applied, then trigger textarea resize.

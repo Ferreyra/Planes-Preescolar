@@ -1,9 +1,8 @@
-import { Component, OnInit, ViewEncapsulation, inject } from '@angular/core';
+import { Component, ViewEncapsulation, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatCalendarCellClassFunction } from '@angular/material/datepicker';
 import { PlanesService } from '../../services/planes.service';
 import { DocumentData } from '@angular/fire/firestore';
-import { FirebaseService } from 'src/app/services/firebase.service';
 
 @Component({
   selector: 'fechas-rango',
@@ -11,16 +10,12 @@ import { FirebaseService } from 'src/app/services/firebase.service';
   styleUrls: ['./fechas.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class FechasComponent implements OnInit{
+export class FechasComponent {
   private planesService = inject(PlanesService);
-  private fbs = inject(FirebaseService);
   
   private holydays: DocumentData | undefined;
   public dateMax: Date;
-  public dateMin: Date;  
-  /* private festivos$?: Observable<DocumentData[]>;
-  private calendarioFestivo?: DocumentData;
-  private mesesFestivos: string[] = []; */
+  public dateMin: Date;
   
   public dateRange = new FormGroup({
     start: new FormControl<Date | null>(null, Validators.required),
@@ -31,19 +26,6 @@ export class FechasComponent implements OnInit{
     this.dateMin = this.planesService.dateMin;
     this.dateMax = this.planesService.dateMax;
   }
-
-  ngOnInit(): void {
-    
-  }
-
-  /* year() {
-    this.festivos$ = this.fbs.getCollection('Calendario')
-    this.festivos$.subscribe( (diasF) => {
-      this.calendarioFestivo = diasF;
-      this.mesesFestivos= Object.keys(this.calendarioFestivo)
-      console.log({ fechasCalendario: this.calendarioFestivo, keysMeses: this.mesesFestivos})
-    })
-  } */
 
   weekendDisable: (date: Date | null) => boolean = (date: Date | null) => {
     if (!date) {
@@ -78,7 +60,6 @@ export class FechasComponent implements OnInit{
         if( this.holydays ) {
           const date = cellDate.getDate();
           const month = cellDate.getMonth() + 1;
-          // console.log({delMes: this.festivosDelMes[month]})
           const mes = this.holydays[month]
           if( mes ){
             let found = mes.find((festivo: number) => festivo === date)             
