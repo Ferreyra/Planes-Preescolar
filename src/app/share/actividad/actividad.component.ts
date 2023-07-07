@@ -1,35 +1,25 @@
-import { Component, EventEmitter, Input, NgZone, OnInit, Output, ViewChild, inject } from '@angular/core';
+import { Component, Input, NgZone, OnInit, ViewChild, inject } from '@angular/core';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { take } from 'rxjs';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'actividad',
   templateUrl: './actividad.component.html',
   styleUrls: ['./actividad.component.scss']
 })
-export class ActividadComponent implements OnInit{
+export class ActividadComponent implements OnInit {
   private _ngZone = inject(NgZone);
-  private fb = inject(FormBuilder);
-  public checked: boolean = false;
-  public form = this.fb.group({
-    actividad: ['', Validators.required],
-    fecha: [new Date(), Validators.required],
-    materiales: [''],
-  });
-  public date = new Date();
+  public date!: Date;
+  public form!: FormGroup;
 
   ngOnInit () {
-    console.log(this.activityForm)
-    this.date = this.activityForm.value.fecha
-    this.form.patchValue( this.activityForm.value.fecha )
-    // this.formActivity.emit(this.form)
+    this.form = ( this.activityForm as FormGroup )
+    this.date = this.form.controls['fecha'].value
   }
   
   @ViewChild('autosize') autosize!: CdkTextareaAutosize;
   @Input() activityForm!: AbstractControl;
-  // @Input() formGroupName!: string;
-  // @Output() formActivity = new EventEmitter();
 
   triggerResize(): void {
     // Wait for changes to be applied, then trigger textarea resize.

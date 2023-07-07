@@ -1,5 +1,5 @@
 import { Component, NgZone, effect, ViewChild, inject } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { DateRange } from '@angular/material/datepicker';
 import { take } from 'rxjs'
@@ -48,16 +48,17 @@ export class PlanesComponent {
   }
 
   addActivityForm(dateActivity: Date) {  
-    const activityFromGroup: FormGroup = this.fb.group({
-      fecha: [dateActivity, Validators.required],
+    const activityFormGroup: FormGroup = this.fb.group({
       actividad: ['', Validators.required],
+      requiereMateriales: [false],
+      fecha: [dateActivity, Validators.required],
       materiales: ['']
     });
-    ( this.planForm.get('activitiesForm') as FormArray ).push( activityFromGroup );
+    this.activitiesForm.push( activityFormGroup );
   }
 
   get activitiesForm() {
-    return (this.planForm.get('activitiesForm') as FormArray).controls
+    return (this.planForm.controls['activitiesForm'] as FormArray)
   }
   /* activitiesForm$() {
     return from(this.planForm.get('activitiesForm'))
@@ -67,6 +68,15 @@ export class PlanesComponent {
     if( rangeStore ) {
       this.planForm.patchValue({dateRange: JSON.parse(rangeStore) as DateRange<Date>})
     }
+  }
+
+  newFormGroup(activityForm: AbstractControl<any,any>): FormGroup<any> {
+    debugger
+    return this.fb.group( {name: activityForm} )
+  }
+
+  formFromActivity( fgActivity: FormGroup ) {
+    console.log( {fgAct: fgActivity} )
   }
 
   @ViewChild('autosize') autosize!: CdkTextareaAutosize;

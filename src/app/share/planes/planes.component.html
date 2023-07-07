@@ -17,16 +17,17 @@
       </mat-form-field>
       <fechas-rango />
       <!-- <backdrop /> -->
-      <pre><code> {{ planForm.getRawValue() | json }} </code></pre>
+      <!-- <pre><code> {{ planForm.getRawValue() | json }} </code></pre> -->
    </div>
-   
-   <actividad formArrayName="activitiesForm"
-      *ngFor="let activityForm of activitiesForm"
-      [activityForm]="activityForm"
-      class="card-shadow"
-   />
-   <div class="card-shadow"
-        *ngIf="showCierre">
+
+   <div *ngFor="let activityForm of activitiesForm.controls" 
+      formArrayName="activitiesForm"
+      class="card-shadow">   
+      <actividad [activityForm]="activityForm"/>
+   </div>
+
+   <div *ngIf="showCierre"
+      class="card-shadow">
       <mat-form-field 
             class="textarea"
             appearance="outline"

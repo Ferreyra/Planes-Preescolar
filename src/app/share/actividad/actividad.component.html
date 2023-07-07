@@ -1,36 +1,40 @@
 <form [formGroup]="form">
-   <mat-form-field 
+      <mat-form-field 
+            class="textarea"
+            appearance="outline"
+            floatLabel='always'>
+         <mat-label>Actividad  {{ date | date: 'fullDate' | titlecase }}</mat-label>
+         <textarea matInput
+            cdkTextareaAutosize
+            #autosize="cdkTextareaAutosize"
+            cdkAutosizeMinRows="2"
+            cdkAutosizeMaxRows="6"
+            placeholder="Textarea autoajustable"
+            formControlName="actividad">
+         </textarea>
+         <!-- <mat-hint *ngIf="pista"></mat-hint> -->
+      </mat-form-field>
+      
+      <mat-checkbox 
+         class="checkbox" 
+         labelPosition="before"
+         formControlName="requiereMateriales">
+         Actividad requiere materiales
+      </mat-checkbox>
+      <mat-form-field *ngIf="form.controls['requiereMateriales'].value"
          class="textarea"
          appearance="outline"
          floatLabel='always'>
-      <mat-label>Actividad {{ date | date: 'fullDate' | titlecase }}</mat-label>
-      <textarea matInput
-         cdkTextareaAutosize
-         #autosize="cdkTextareaAutosize"
-         cdkAutosizeMinRows="2"
-         cdkAutosizeMaxRows="6"
-         placeholder="Textarea autoajustable"
-         formControlName="actividad">
-      </textarea>
-      <!-- <mat-hint *ngIf="pista"></mat-hint> -->
-   </mat-form-field>
-   
-   <mat-checkbox 
-      class="checkbox" 
-      labelPosition="before"
-      [(ngModel)]="checked">
-      Actividad requiere materiales
-   </mat-checkbox>
-   <mat-form-field *ngIf="checked">
-      <mat-label>Materiales</mat-label>
-      <textarea matInput
-         cdkTextareaAutosize
-         #autosize="cdkTextareaAutosize"
-         cdkAutosizeMinRows="2"
-         cdkAutosizeMaxRows="5"
-         placeholder="Lista de materiales separados por (,)"
-         formControlName="materiales">
-      </textarea>
-   </mat-form-field>
+         <mat-label>Materiales</mat-label>
+         <textarea matInput
+            cdkTextareaAutosize
+            #autosize="cdkTextareaAutosize"
+            cdkAutosizeMinRows="2"
+            cdkAutosizeMaxRows="5"
+            placeholder="Lista de materiales separados por ( , )"
+            formControlName="materiales">
+         </textarea>
+         <!-- <mat-hint *ngIf="pista"></mat-hint> -->
+      </mat-form-field>
 </form>
 
